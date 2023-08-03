@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32630.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DCSBucketBot", "DCSBucketBot\DCSBucketBot.pyproj", "{61D2BE37-8137-472B-B12B-091DEB0CF6CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61D2BE37-8137-472B-B12B-091DEB0CF6CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D2BE37-8137-472B-B12B-091DEB0CF6CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14B55A60-66BE-435F-8A55-C5010D5044C2}
+	EndGlobalSection
+EndGlobal
