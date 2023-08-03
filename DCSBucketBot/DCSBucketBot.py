@@ -1,11 +1,21 @@
+# install python 3.11 and then do these on the cmd line (windows)
 # py -3.11 -m pip install -U discord.py
 # py -3.11 -m pip install -U dotenv
 # py -3.11 -m pip install -U requests
 # py -3.11 -m pip install python-certifi-win32
 # py -3.11 -m pip install tabulate
 # py -3.11 -m pip install asyncio
-# py -3.11 -m pip install datetime
 
+#
+#  requires a .env file in the same directory as DCSBucketBot.py
+#
+#  put this in the file
+#
+#  # .env
+#  DISCORD_TOKEN=MTEzNjYwMxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJ2Jmt7Zo
+#  JSON_URL=https://url_to_json_file/player_stats.json
+#
+#
 # bot.py
 
 import os
