@@ -27,22 +27,8 @@ intents.message_content = True
 #client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='!',intents=intents) 
 #client = discord.Client(intents=discord.Intents.default())
-@bot.command(name='99')
-async def nine_nine(ctx):
-    brooklyn_99_quotes = [
-        'I\'m the human form of the 💯 emoji.',
-        'Bingpot!',
-        (
-            'Cool. Cool cool cool cool cool cool cool, '
-            'no doubt no doubt no doubt no doubt.'
-        ),
-    ]
 
-    #response = random.choice(brooklyn_99_quotes)
-    response = 'This is some kind of DCS output.'
-    await ctx.send(response)
-
-@bot.command(name='dcs')
+@bot.command(name='raw')
 async def get_data(ctx):
     try:
         # Retrieve data from the HTTP URL
@@ -50,25 +36,53 @@ async def get_data(ctx):
 
         if response.status_code == 200:
             data = response.text
-            #table = tabulate(data.items(), headers=["Key", "Value"], tablefmt="grid")
-            #await ctx.send(f"Data from URL:\n```\n{table}\n```")
-            for todo in data:
-                #if todo["completed"]:
-                await ctx.send(f"{todo['players']}")
-
-            #await ctx.send(f"Data from URL:\n```\n{data}\n```")
+            await ctx.send(f"Data from URL:\n```\n{table}\n```")
+            
         else:
             await ctx.send(f"Failed to retrieve data. Status code: {response.status_code}")
 
     except Exception as e:
         await ctx.send(f"An error occurred: {str(e)}")
 
-@bot.command(name='xpnoodle')
+@bot.command(name='pilots')
+async def get_allxp(ctx):
+    try:
+        # Retrieve data from the HTTP URL
+        response = requests.get(URL)
+        
+        if response.status_code == 200:
+            data = response.json()  # Convert JSON to dictionary
+
+            player_info_list = []
+
+            # Iterate through the players dictionary and extract player names and units
+            for player_data in data['players']:
+                player_name = player_data.get('name', 'Unknown Player')
+                player_unit = player_data.get('unit', 'Unknown Unit')
+                player_info_list.append(f"{player_name} ({player_unit})")
+
+            # Create a formatted string with player names and units
+            player_info_string = "\n".join(player_info_list)
+
+            # Get the name of the user making the request
+            user_name = ctx.author.display_name
+
+            await ctx.send(f"Name and Unit for each player - Requested by {user_name}:\n{player_info_string}")
+        else:
+            await ctx.send(f"Failed to retrieve data. Status code: {response.status_code}")
+
+
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
+
+@bot.command(name='xpme')
 async def get_xp(ctx):
     try:
         # Retrieve data from the HTTP URL
         response = requests.get(URL)
-        player_name = client.user
+        player_name = ctx.author.display_name
+        await ctx.send(f"XP for {player_name}")
+        
         if response.status_code == 200:
             data = response.json()  # Convert JSON to dictionary
 
@@ -114,8 +128,8 @@ async def get_allxp(ctx):
     except Exception as e:
         await ctx.send(f"An error occurred: {str(e)}")
 
-@bot.command(name='xpsorted')
-async def get_allxp(ctx):
+@bot.command(name='xp')
+async def get_allxp_sorted(ctx):
     try:
         # Retrieve data from the HTTP URL
         response = requests.get(URL)
