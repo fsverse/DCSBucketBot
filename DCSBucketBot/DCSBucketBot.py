@@ -3,6 +3,8 @@
 # py -3.11 -m pip install -U requests
 # py -3.11 -m pip install python-certifi-win32
 # py -3.11 -m pip install tabulate
+# py -3.11 -m pip install asyncio
+# py -3.11 -m pip install datetime
 
 # bot.py
 
@@ -13,18 +15,20 @@ import requests
 import json
 from tabulate import tabulate
 
-from discord.ext import commands
+from discord.ext import commands,tasks
 from dotenv import load_dotenv
 import dotenv
-
+import asyncio
+import datetime
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 URL = os.getenv('JSON_URL')
+CHANNEL = 'scoreboard'
 
 intents = discord.Intents.default()
 intents.message_content = True
-#client = discord.Client(intents=intents)
+client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='!',intents=intents) 
 #client = discord.Client(intents=discord.Intents.default())
 
@@ -131,14 +135,56 @@ async def get_allxp(ctx):
 @bot.command(name='xp')
 async def get_allxp_sorted(ctx):
     try:
-        # Retrieve data from the HTTP URL
-        response = requests.get(URL)
-        
-        if response.status_code == 200:
-            data = response.json()  # Convert JSON to dictionary
+        channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL)
+        current_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-            # Check if the player exists in the "stats" dictionary
-            player_xp_list = []
+        if channel:
+            # Retrieve data from the HTTP URL
+            response = requests.get(URL)
+        
+            if response.status_code == 200:
+                data = response.json()  # Convert JSON to dictionary
+
+                # Check if the player exists in the "stats" dictionary
+                player_xp_list = []
+
+                # Iterate through the stats dictionary and extract player names and XP values
+                for player_name, player_data in data['stats'].items():
+                    if isinstance(player_data, dict):  # Check if the player data is a dictionary
+                        player_xp = player_data.get('XP', 0)
+                        player_xp_list.append((player_name, player_xp))
+
+                # Sort the list of player XP values by XP in descending order
+                sorted_player_xp_list = sorted(player_xp_list, key=lambda x: x[1], reverse=True)
+
+                # Create a formatted string with sorted player XP values
+                xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp in sorted_player_xp_list])
+
+                await ctx.send(f"[{current_datetime}] XP for each player (sorted by XP):\n```\n{xp_string}\n```")
+            else:
+                await ctx.send(f"Failed to retrieve data. Status code: {response.status_code}")
+
+
+
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
+
+# Define a task to retrieve and display name and unit for each player in the dcs-chat channel
+@tasks.loop(minutes=30)  # Run the task every 30 minutes
+async def get_all_players_task():
+    try:
+        # Get the channel by name
+        channel = discord.utils.get(bot.get_all_channels(), name=CHANNEL)
+        current_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if channel:
+            # Retrieve data from the HTTP URL
+            response = requests.get(URL)
+
+            if response.status_code == 200:
+                data = response.json()  # Convert JSON to dictionary
+
+                player_xp_list = []
 
             # Iterate through the stats dictionary and extract player names and XP values
             for player_name, player_data in data['stats'].items():
@@ -152,14 +198,19 @@ async def get_allxp_sorted(ctx):
             # Create a formatted string with sorted player XP values
             xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp in sorted_player_xp_list])
 
-            await ctx.send(f"XP for each player (sorted by XP):\n```\n{xp_string}\n```")
+            await channel.send(f"[{current_datetime}] XP for each player (sorted by XP):\n```\n{xp_string}\n```")
         else:
-            await ctx.send(f"Failed to retrieve data. Status code: {response.status_code}")
-
+            await channel.send(f"Failed to retrieve data. Status code: {response.status_code}")
 
 
     except Exception as e:
-        await ctx.send(f"An error occurred: {str(e)}")
+        await channel.send(f"An error occurred: {str(e)}")
+
+# Start the task
+@bot.listen()
+async def on_ready():
+    get_all_players_task.start() # important to start the loop
+
 # Run the bot
 bot.run(TOKEN)
 
