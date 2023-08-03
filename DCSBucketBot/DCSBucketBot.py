@@ -15,10 +15,12 @@ from tabulate import tabulate
 
 from discord.ext import commands
 from dotenv import load_dotenv
+import dotenv
 
 load_dotenv()
-#TOKEN = os.getenv('DISCORD_TOKEN')
-TOKEN = 'MTEzNjYwMTYwODk5ODg5NTcwNg.GUlhbw.i9F3ii1Xt7qKHiaWvEfZYI_ZHZjRzYb11p4eog'
+TOKEN = os.getenv('DISCORD_TOKEN')
+URL = os.getenv('JSON_URL')
+
 intents = discord.Intents.default()
 intents.message_content = True
 #client = discord.Client(intents=intents)
@@ -43,7 +45,7 @@ async def nine_nine(ctx):
 async def get_data(ctx):
     try:
         # Retrieve data from the HTTP URL
-        response = requests.get('https://f4.fox3.cloud/index.php/s/98baMNfYZy4sLD6/download/player_stats.json')
+        response = requests.get(URL)
 
         if response.status_code == 200:
             data = response.text
@@ -64,8 +66,8 @@ async def get_data(ctx):
 async def get_xp(ctx):
     try:
         # Retrieve data from the HTTP URL
-        response = requests.get('https://f4.fox3.cloud/index.php/s/98baMNfYZy4sLD6/download/player_stats.json')
-        player_name = 'Bucket 1-1 | Noodle'
+        response = requests.get(URL)
+        player_name = client.user
         if response.status_code == 200:
             data = response.json()  # Convert JSON to dictionary
 
@@ -86,7 +88,7 @@ async def get_xp(ctx):
 async def get_allxp(ctx):
     try:
         # Retrieve data from the HTTP URL
-        response = requests.get('https://f4.fox3.cloud/index.php/s/98baMNfYZy4sLD6/download/player_stats.json')
+        response = requests.get(URL)
         
         if response.status_code == 200:
             data = response.json()  # Convert JSON to dictionary
@@ -115,7 +117,7 @@ async def get_allxp(ctx):
 async def get_allxp(ctx):
     try:
         # Retrieve data from the HTTP URL
-        response = requests.get('https://f4.fox3.cloud/index.php/s/98baMNfYZy4sLD6/download/player_stats.json')
+        response = requests.get(URL)
         
         if response.status_code == 200:
             data = response.json()  # Convert JSON to dictionary
