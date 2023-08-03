@@ -17,6 +17,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import dotenv
 
+
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 URL = os.getenv('JSON_URL')
