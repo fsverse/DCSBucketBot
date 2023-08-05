@@ -189,13 +189,35 @@ async def get_allxp_sorted(ctx):
                 for player_name, player_data in data['stats'].items():
                     if isinstance(player_data, dict):  # Check if the player data is a dictionary
                         player_xp = player_data.get('XP', 0)
-                        player_xp_list.append((player_name, player_xp))
+                        
+                    
+                    if   player_xp < 2000 : player_rank = 'E-1 Airman basic'
+                    elif player_xp < 4500 : player_rank = 'E-2 Airman'
+                    elif player_xp < 7700 : player_rank = 'E-3 Airman first class'
+                    elif player_xp < 11800 : player_rank = 'E-4 Senior airman'
+                    elif player_xp < 17000 : player_rank = 'E-5 Staff sergeant'
+                    elif player_xp < 23500 : player_rank = 'E-6 Technical sergeant'
+                    elif player_xp < 31500 : player_rank = 'E-7 Master sergeant'
+                    elif player_xp < 42000 : player_rank = 'E-8 Senior master sergeant'
+                    elif player_xp < 52800 : player_rank = 'E-9 Chief master sergeant'
+                    elif player_xp < 66500 : player_rank = 'O-1 Second lieutenant'
+                    elif player_xp < 82500 : player_rank = 'O-2 First lieutenant'
+                    elif player_xp < 101000 : player_rank = 'O-3 Captain'
+                    elif player_xp < 122200 : player_rank = 'O-4 Major'
+                    elif player_xp < 146300 : player_rank = 'O-5 Lieutenant colonel'
+                    elif player_xp < 173500 : player_rank = 'O-6 Colonel'
+                    elif player_xp < 204000 : player_rank = 'O-7 Brigadier general'
+                    elif player_xp < 238000 : player_rank = 'O-8 Major general'
+                    elif player_xp < 275700 : player_rank = 'O-9 Lieutenant general'
+                    else            : player_rank = 'O-10 General'
+
+                    player_xp_list.append((player_name, player_xp,player_rank))
 
                 # Sort the list of player XP values by XP in descending order
                 sorted_player_xp_list = sorted(player_xp_list, key=lambda x: x[1], reverse=True)
 
                 # Create a formatted string with sorted player XP values
-                xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp in sorted_player_xp_list])
+                xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
 
                 await ctx.send(f"[{current_datetime}] XP for each player (sorted by XP):\n```\n{xp_string}\n```")
             else:
@@ -227,13 +249,34 @@ async def get_all_players_task():
             for player_name, player_data in data['stats'].items():
                 if isinstance(player_data, dict):  # Check if the player data is a dictionary
                     player_xp = player_data.get('XP', 0)
-                    player_xp_list.append((player_name, player_xp))
+                    
+                    if   player_xp < 2000 : player_rank = 'E-1 Airman basic'
+                    elif player_xp < 4500 : player_rank = 'E-2 Airman'
+                    elif player_xp < 7700 : player_rank = 'E-3 Airman first class'
+                    elif player_xp < 11800 : player_rank = 'E-4 Senior airman'
+                    elif player_xp < 17000 : player_rank = 'E-5 Staff sergeant'
+                    elif player_xp < 23500 : player_rank = 'E-6 Technical sergeant'
+                    elif player_xp < 31500 : player_rank = 'E-7 Master sergeant'
+                    elif player_xp < 42000 : player_rank = 'E-8 Senior master sergeant'
+                    elif player_xp < 52800 : player_rank = 'E-9 Chief master sergeant'
+                    elif player_xp < 66500 : player_rank = 'O-1 Second lieutenant'
+                    elif player_xp < 82500 : player_rank = 'O-2 First lieutenant'
+                    elif player_xp < 101000 : player_rank = 'O-3 Captain'
+                    elif player_xp < 122200 : player_rank = 'O-4 Major'
+                    elif player_xp < 146300 : player_rank = 'O-5 Lieutenant colonel'
+                    elif player_xp < 173500 : player_rank = 'O-6 Colonel'
+                    elif player_xp < 204000 : player_rank = 'O-7 Brigadier general'
+                    elif player_xp < 238000 : player_rank = 'O-8 Major general'
+                    elif player_xp < 275700 : player_rank = 'O-9 Lieutenant general'
+                    else            : player_rank = 'O-10 General'
+
+                    player_xp_list.append((player_name, player_xp,player_rank))
 
             # Sort the list of player XP values by XP in descending order
             sorted_player_xp_list = sorted(player_xp_list, key=lambda x: x[1], reverse=True)
 
             # Create a formatted string with sorted player XP values
-            xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp in sorted_player_xp_list])
+            xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
 
             blue_count = len(data['zones']['blue'])
             neutral_count = len(data['zones']['neutral'])
