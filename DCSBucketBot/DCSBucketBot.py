@@ -58,8 +58,35 @@ async def get_data(ctx):
     except Exception as e:
         await ctx.send(f"An error occurred: {str(e)}")
 
+@bot.command(name='zones')
+async def get_zones(ctx):
+    try:
+        # Retrieve data from the HTTP URL
+        response = requests.get(URL)
+        
+        if response.status_code == 200:
+            data = response.json()  # Convert JSON to dictionary
+
+            # Check if the player exists in the "stats" dictionary
+            zone_list = []
+            blue_count = len(data['zones']['blue'])
+            neutral_count = len(data['zones']['neutral'])
+            red_count = len(data['zones']['red'])
+            
+            str = f"Blue:{blue_count}\nNeutral:{neutral_count}\nRed:{red_count}\n"
+            
+
+            await ctx.send(str)
+        else:
+            await ctx.send(f"Failed to retrieve data. Status code: {response.status_code}")
+
+
+
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
+
 @bot.command(name='pilots')
-async def get_allxp(ctx):
+async def get_pilots(ctx):
     try:
         # Retrieve data from the HTTP URL
         response = requests.get(URL)
@@ -207,6 +234,14 @@ async def get_all_players_task():
 
             # Create a formatted string with sorted player XP values
             xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp in sorted_player_xp_list])
+
+            blue_count = len(data['zones']['blue'])
+            neutral_count = len(data['zones']['neutral'])
+            red_count = len(data['zones']['red'])
+            
+            #await ctx.send(f"Blue:{blue_count}\nNeutral:{neutral_count}\nRed:{red_count}\n")
+
+            xp_string += f"\n\nBlue:{blue_count}\nNeutral:{neutral_count}\nRed:{red_count}\n"
 
             await channel.send(f"[{current_datetime}] XP for each player (sorted by XP):\n```\n{xp_string}\n```")
         else:
