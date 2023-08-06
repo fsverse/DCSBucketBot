@@ -217,7 +217,8 @@ async def get_allxp_sorted(ctx):
                 sorted_player_xp_list = sorted(player_xp_list, key=lambda x: x[1], reverse=True)
 
                 # Create a formatted string with sorted player XP values
-                xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
+                #xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
+                xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp,player_rank in sorted_player_xp_list])
 
                 await ctx.send(f"[{current_datetime}] XP for each player (sorted by XP):\n```\n{xp_string}\n```")
             else:
@@ -276,8 +277,8 @@ async def get_all_players_task():
             sorted_player_xp_list = sorted(player_xp_list, key=lambda x: x[1], reverse=True)
 
             # Create a formatted string with sorted player XP values
-            xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
-
+            #xp_string = "\n".join([f"{player_name}: {xp} : {player_rank}" for player_name, xp, player_rank in sorted_player_xp_list])
+            xp_string = "\n".join([f"{player_name}: {xp}" for player_name, xp, player_rank in sorted_player_xp_list])
             blue_count = len(data['zones']['blue'])
             neutral_count = len(data['zones']['neutral'])
             red_count = len(data['zones']['red'])
